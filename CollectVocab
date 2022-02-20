@@ -1,0 +1,28 @@
+from ordered_set import OrderedSet
+
+fin = open('allLyrics.txt', 'r', encoding='utf8')
+toRemove = open('addToVocab', 'r', encoding='utf8')
+
+blacklist = toRemove.read().split()
+blacklist[1] = '\n'
+asStr = fin.read()
+for unwanted in blacklist:
+    asStr = asStr.replace(unwanted, '')
+
+unique = OrderedSet()
+print("finished removing blacklisted tokens")
+everything = asStr.split()
+print(len(everything))
+for word in everything:
+    if word not in unique:
+        unique.add(word)
+        if len(unique) % 10000 == 0:
+            print(len(unique))
+
+print("finished collecting words to unique[]")
+fout = open('vocab.txt', 'w', encoding='utf8')
+for word in unique:
+    fout.write(word + "\n")
+fout.close()
+fin.close()
+toRemove.close()
